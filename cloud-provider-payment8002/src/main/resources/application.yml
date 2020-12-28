@@ -1,5 +1,15 @@
 server:
-  port: 8001
+  port: 8002
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  instance:
+    instance-id: payment8002
+    prefer-ip-address: true
 
 spring:
   application:
@@ -14,13 +24,3 @@ spring:
 mybatis:
   mapperLocations: classpath:mapper/*.xml
   type-aliases-package: com.wtw.springcloud.entities    # 所有Entity别名类所在包
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
-  instance:
-    instance-id: payment8001    # 给服务起一个别名
-    prefer-ip-address: true     # 访问路径显示ip地址

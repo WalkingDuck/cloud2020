@@ -15,11 +15,11 @@ public class PaymentController {
     @Resource
     private PaymentService paymentService;
 
-    @Resource
-    private DiscoveryClient discoveryClient;
-
     @Value("${server.port}")
     private String serverPort;
+
+    @Resource
+    private DiscoveryClient discoveryClient;
 
     @PostMapping(value = "/payment/create")
     public CommonResult<Payment> create(@RequestBody Payment payment) {
