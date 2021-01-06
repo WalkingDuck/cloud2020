@@ -1,0 +1,18 @@
+server:
+  port: 80
+
+eureka:
+  client:
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+
+
+# 设置ribbon的超时时长
+#ribbon:
+#  ReadTimeout: 3000
+#  ConnectTimeout: 3000
+
+feign:
+  hystrix:
+    enabled: true
