@@ -1,5 +1,6 @@
 package com.wtw.springcloud.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.wtw.springcloud.service.PaymentService;
@@ -29,5 +30,26 @@ public class PaymentServiceImpl implements PaymentService {
 
     public String paymentInfo_TimeoutHandler(Integer id) {
         return "paymentInfo_TimeoutHandler: Thread: " + Thread.currentThread().getName() + ", id = " + id;
+    }
+
+    // 服务熔断
+    @Override
+    @HystrixCommand(fallbackMethod = "paymentCircuitBreaker_fallback", commandProperties = {
+            @HystrixProperty(name = "circuitBreaker.enabled",value = "true"),  //是否开启断路器
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",value = "10"),   //请求次数
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds",value = "10000"),  //关闸时间
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage",value = "60"), //请求错误率率达到多少后跳闸
+    })
+    public String paymentCircuitBreaker(Integer id) {
+        if(id < 0) {
+            throw new RuntimeException("id < 0!");
+        }
+
+        String simpleUUID = IdUtil.simpleUUID();
+        return "paymentCircuitBreaker: Thread: " + Thread.currentThread().getName() + ", id = " + id + ", simpleUUID = " + simpleUUID;
+    }
+
+    public String paymentCircuitBreaker_fallback(Integer id) {
+        return "paymentCircuitBreaker_fallback: Error! id < 0, id = " + id;
     }
 }
